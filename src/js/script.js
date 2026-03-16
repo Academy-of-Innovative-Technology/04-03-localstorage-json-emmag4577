@@ -1,60 +1,53 @@
-var Database = {
-	keyName: "Mutant Database",
-	data: []
-};
+function loadDataSource(){
 
+    var stored = localStorage.getItem(Database.keyName);
 
-function loadDataSource() {
-	var storedData = localStorage.getItem(Database.keyName);
+    var parsed = JSON.parse(stored);
 
-	var parsedData = JSON.parse(storedData);
+    Database.data = parsed.response;
 
-	Database.data = parsedData.response;
-	
-	displayData( Database.data );
+    displayData(Database.data);
+
 }
 
 
+function displayData(dataArray){
 
-function displayData(dataArray) {
-	var container = document.querySelector(".row");
+    var container = document.querySelector(".row");
 
-	dataArray.forEach(function(mutant){
+    dataArray.forEach(function(m){
 
-		var html = `
-		<div class="col">
-			<div class="card shadow-lg">
-				<img src="${mutant.image}" class="card-img-top">
+        var card = `
+        <div class="col">
+            <div class="card shadow-lg">
 
-				<div class="card-body">
-					<h5 class="card-title text-center">
-						${mutant.name.alias}
-					</h5>
+                <img src="${m.image}" class="card-img-top">
 
-					<p class="text-center text-muted">
-						${mutant.name.firstName} ${mutant.name.lastName}
-					</p>
+                <div class="card-body">
 
-					<h6 class="fw-bold">Profile</h6>
-					<ul>
-					<h6 class="fw-bold">Powers</h6>
-					<ul>
-						${mutant.powers.map(power => `<li>${power}</li>`).join("")}
-					</ul>
+                    <h5 class="card-title text-center">${m.name.alias}</h5>
 
-					<h6 class="fw-bold">Affiliations</h6>
-					<ul>
-						${mutant.affiliation.map(team => `<li>${team}</li>`).join("")}
-					</ul>
+                    <p class="text-center text-muted">
+                        ${m.name.firstName} ${m.name.lastName}
+                    </p>
 
-				</div>
-			</div>
-		</div>
-		`;
+                    <p>Gender: ${m.profile.gender}</p>
+                    <p>Eyes: ${m.profile.eyes}</p>
+                    <p>Hair: ${m.profile.hair}</p>
+                    <p>Height: ${m.profile.height}</p>
 
-		container.insertAdjacentHTML("beforeend", html);
+                    <p><strong>Powers:</strong> ${m.powers.join(", ")}</p>
 
-	});
+                    <p><strong>Affiliation:</strong> ${m.affiliation.join(", ")}</p>
+
+                </div>
+            </div>
+        </div>
+        `;
+
+        container.insertAdjacentHTML("beforeend", card);
+
+    });
 
 }
 
