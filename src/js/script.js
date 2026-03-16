@@ -1,54 +1,83 @@
-function loadDataSource(){
+var Database = {
+    keyName: "Mutant Database",
+    data: []
+};
 
-    var stored = localStorage.getItem(Database.keyName);
 
-    var parsed = JSON.parse(stored);
+function loadDataSource() {
 
-    Database.data = parsed.response;
+
+    var storedData = localStorage.getItem(Database.keyName);
+
+
+    if(storedData == null){
+        console.log("No data found in localStorage");
+        return;
+    }
+
+    var parsedData = JSON.parse(storedData);
+
+    Database.data = parsedData.response;
 
     displayData(Database.data);
-
 }
 
 
-function displayData(dataArray){
+function displayData(dataArray) {
 
     var container = document.querySelector(".row");
 
-    dataArray.forEach(function(m){
+    dataArray.forEach(function(mutant){
 
-        var card = `
+        var html = `
         <div class="col">
             <div class="card shadow-lg">
 
-                <img src="${m.image}" class="card-img-top">
+                <img src="${mutant.image}" class="card-img-top">
 
                 <div class="card-body">
 
-                    <h5 class="card-title text-center">${m.name.alias}</h5>
+                    <h5 class="card-title text-center mb-3">
+                        ${mutant.name.alias}
+                    </h5>
 
-                    <p class="text-center text-muted">
-                        ${m.name.firstName} ${m.name.lastName}
+                    <p class="card-text text-center text-muted">
+                        ${mutant.name.firstName} ${mutant.name.lastName}
                     </p>
 
-                    <p>Gender: ${m.profile.gender}</p>
-                    <p>Eyes: ${m.profile.eyes}</p>
-                    <p>Hair: ${m.profile.hair}</p>
-                    <p>Height: ${m.profile.height}</p>
+                    <h6 class="fw-bold">Profile</h6>
+                    <ul class="list-unstyled">
+                        <li>Gender: ${mutant.profile.gender}</li>
+                        <li>Eyes: ${mutant.profile.eyes}</li>
+                        <li>Hair: ${mutant.profile.hair}</li>
+                        <li>Height: ${mutant.profile.height}</li>
+                    </ul>
 
-                    <p><strong>Powers:</strong> ${m.powers.join(", ")}</p>
+                    <h6 class="fw-bold">Powers</h6>
+                    <ul class="list-unstyled">
+                        ${mutant.powers.map(function(power){
+                            return `<li>${power}</li>`;
+                        }).join("")}
+                    </ul>
 
-                    <p><strong>Affiliation:</strong> ${m.affiliation.join(", ")}</p>
+                    <h6 class="fw-bold">Affiliations</h6>
+                    <ul class="list-inline">
+                        ${mutant.affiliation.map(function(team){
+                            return `<li class="list-inline-item badge bg-primary">${team}</li>`;
+                        }).join("")}
+                    </ul>
 
                 </div>
+
             </div>
         </div>
         `;
 
-        container.insertAdjacentHTML("beforeend", card);
+        container.insertAdjacentHTML("beforeend", html);
 
     });
 
 }
+
 
 loadDataSource();
