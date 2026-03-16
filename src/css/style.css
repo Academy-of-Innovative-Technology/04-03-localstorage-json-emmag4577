@@ -2,3 +2,22 @@ html {
   height: 100%;
   width: 100%;
 }
+
+.card{
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.card img{
+    height: 350px;
+    object-fit: cover;
+}
+
+ul{
+    padding-left: 15px;
+}
+
+.card-title{
+    font-weight: bold;
+}
